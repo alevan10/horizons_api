@@ -41,7 +41,7 @@ stages:
 Pylint:
   stage: Static Analysis
   script:
-    - pylint -d C0301 src/horizons_client/*.py
+    - pylint -d C0301 src/horizons_web_service/*.py
 
 Black:
   stage: Static Analysis
