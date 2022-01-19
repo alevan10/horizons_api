@@ -258,7 +258,7 @@ python-dateutil = "2.8.2"
 
 [package.source]
 type = "file"
-url = "horizons_client/horizons_client.whl"
+url = "horizons_client/horizons-client.whl"
 
 [[package]]
 name = "identify"
