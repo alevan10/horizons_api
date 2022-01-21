@@ -30,7 +30,7 @@ before_script:
   - source venv/bin/activate
   - pip install --upgrade pip
   - pip install poetry
-  - poetry export -f requirements.txt --output requirements.txt --without-hashes
+  - poetry export -f requirements.txt --output requirements.txt # temporary until I can deal with the horizons python package
   - pip install -r requirements.txt
   - export PYTHONPATH="$PYTHONPATH:$(pwd)/src"
 
