@@ -11,7 +11,7 @@ fastapi = ">=0.70.0"
 uvicorn = ">=0.15.0"
 gunicorn = ">=20.1.0"
 aiohttp = ">=3.7.4.post0"
-horizons_client = { file = "horizons_client/horizons_client-py3-none-any.whl.whl" }
+horizons_client = { file = "horizons_client/horizons_client-py3-none-any.whl" }
 
 [tool.poetry.dev-dependencies]
 pytest = "6.2.5"
