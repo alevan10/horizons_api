@@ -30,31 +30,31 @@ before_script:
   - source venv/bin/activate
   - pip install --upgrade pip
   - pip install poetry
-  - echo "Current path $(pwd)"
-  - echo "Files in folder $(ls horizons_client)"
+  - poetry remove horizons-client  # Temporary
+  - poetry add horizons_client/*  # Temporary
   - poetry install -v
   - export PYTHONPATH="$PYTHONPATH:$(pwd)/src"
 
 stages:
   - Static Analysis
-  - Tests
+#  - Tests
 
 Pylint:
   stage: Static Analysis
   script:
-    - pylint -d C0301 src/horizons_client/*.py
+    - pylint -d C0301 src/horizons_web_service tests
 
 Black:
   stage: Static Analysis
   script:
     - python -m black . --check --verbose
 
-Unit:
-  stage: Tests
-  script:
-    - pytest -v ./tests/unittests
-
-Functional:
-  stage: Tests
-  script:
-    - pytest -v ./tests/functional
+#Unit:
+#  stage: Tests
+#  script:
+#    - pytest -v ./tests/unit
+#
+#Functional:
+#  stage: Tests
+#  script:
+#    - pytest -v ./tests/functional
