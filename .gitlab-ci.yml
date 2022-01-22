@@ -37,7 +37,7 @@ before_script:
 
 stages:
   - Static Analysis
-  - Tests
+#  - Tests
 
 Pylint:
   stage: Static Analysis
@@ -49,12 +49,12 @@ Black:
   script:
     - python -m black . --check --verbose
 
-Unit:
-  stage: Tests
-  script:
-    - pytest -v ./tests/unit
-
-Functional:
-  stage: Tests
-  script:
-    - pytest -v ./tests/functional
+#Unit:
+#  stage: Tests
+#  script:
+#    - pytest -v ./tests/unit
+#
+#Functional:
+#  stage: Tests
+#  script:
+#    - pytest -v ./tests/functional
