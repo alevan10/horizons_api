@@ -52,7 +52,7 @@ Black:
 Unit:
   stage: Tests
   script:
-    - pytest -v ./tests/unittests
+    - pytest -v ./tests/unit
 
 Functional:
   stage: Tests
