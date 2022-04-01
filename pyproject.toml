@@ -5,13 +5,17 @@ description = "A FastAPI Web Service to return results from a Horizons Ephemerid
 authors = ["alevan <levan.andrew.w@gmail.com>"]
 license = "MIT"
 
+[[tool.poetry.source]]
+name = "home"
+url = "http://pypi.home/"
+
 [tool.poetry.dependencies]
 python = "^3.8"
 fastapi = ">=0.70.0"
 uvicorn = ">=0.15.0"
 gunicorn = ">=20.1.0"
 aiohttp = ">=3.7.4.post0"
-horizons-client = {path = "horizons_client/horizons_client-0.1.0-py3-none-any.whl"}
+horizons-client = "^0.1.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "6.2.5"
