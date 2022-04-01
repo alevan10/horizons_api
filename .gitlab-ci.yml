@@ -30,8 +30,7 @@ before_script:
   - source venv/bin/activate
   - pip install --upgrade pip
   - pip install poetry
-  - poetry remove horizons-client  # Temporary
-  - poetry add horizons_client/*  # Temporary
+  - poetry config http-basic.home $PYPI_USER $PYPI_PASSWORD
   - poetry install -v
   - export PYTHONPATH="$PYTHONPATH:$(pwd)/src"
 
