@@ -29,8 +29,8 @@ before_script:
   - virtualenv venv
   - source venv/bin/activate
   - pip install --upgrade pip
-  - poetry config http-basic.home $PYPI_USER $PYPI_PASSWORD
   - pip install poetry
+  - poetry config http-basic.home $PYPI_USER $PYPI_PASSWORD
   - poetry install -v
   - export PYTHONPATH="$PYTHONPATH:$(pwd)/src"
 
