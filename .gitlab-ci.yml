@@ -25,7 +25,6 @@ cache:
 
 before_script:
   - python -V  # Print out python version for debugging
-  - docker info
   - pip install virtualenv
   - virtualenv venv
   - source venv/bin/activate
@@ -61,10 +60,22 @@ Unit:
 #  script:
 #    - pytest -v ./tests/functional
 
-Build:
-  stage: Build
+build:
+  stage: build
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
   script:
-    - make push-prod
+    - mkdir -p /kaniko/.docker
+    - export HORIZONS_API_VERSION=$(poetry version -s)
+    - echo "{\"auths\":{\"levan.home:5000\":{\"auth\":\"{}\"}}}" > /kaniko/.docker/config.json
+    - >-
+      /kaniko/executor
+      --context "${CI_PROJECT_DIR}"
+      --dockerfile "${CI_PROJECT_DIR}/src/docker/Dockerfile"
+      --destination "levan.home:5000/horizons-api:${HORIZONS_API_VERSION}"
+      --build-arg PYPI_USER=$PYPI_USER
+      --build-arg PYPI_PASSWORD=$PYPI_PASSWORD
 
 Deploy:
   stage: Deploy
