@@ -26,3 +26,7 @@ repos:
         entry: pylint --reports=no --rcfile=.pylintrc --disable=C
         types: [ python ]
         language: system
+      - id: bump-version
+        name: bump-horizons-api-version
+        entry: ./check_version.sh
+        language: script
