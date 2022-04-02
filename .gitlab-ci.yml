@@ -25,6 +25,7 @@ cache:
 
 before_script:
   - python -V  # Print out python version for debugging
+  - docker info
   - pip install virtualenv
   - virtualenv venv
   - source venv/bin/activate
@@ -32,11 +33,13 @@ before_script:
   - pip install poetry
   - poetry config http-basic.home $PYPI_USER $PYPI_PASSWORD
   - poetry install -v
-  - export PYTHONPATH="$PYTHONPATH:$(pwd)/src"
+  - export PYTHONPATH="$(pwd)/src:$(pwd)/src/horizons_web_service:$PYTHONPATH"
 
 stages:
   - Static Analysis
   - Tests
+  - Build
+  - Deploy
 
 Pylint:
   stage: Static Analysis
@@ -57,3 +60,13 @@ Unit:
 #  stage: Tests
 #  script:
 #    - pytest -v ./tests/functional
+
+Build:
+  stage: Build
+  script:
+    - make push-prod
+
+Deploy:
+  stage: Deploy
+  script:
+    - helm upgrade horizons-api ./horizons-api --install --values=./horizons-api/values.yaml --namespace horizons
