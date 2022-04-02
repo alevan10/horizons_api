@@ -33,26 +33,26 @@ before_script:
   - export PYTHONPATH="$(pwd)/src:$(pwd)/src/horizons_web_service:$PYTHONPATH"
 
 stages:
-  - Static Analysis
-  - Tests
+#  - Static Analysis
+#  - Tests
   - Build Prep
   - Build
   - Deploy
-
-Pylint:
-  stage: Static Analysis
-  script:
-    - pylint -d C0301 src/horizons_web_service tests
-
-Black:
-  stage: Static Analysis
-  script:
-    - python -m black . --check --verbose
-
-Unit:
-  stage: Tests
-  script:
-    - pytest -v ./tests/unit
+#
+#Pylint:
+#  stage: Static Analysis
+#  script:
+#    - pylint -d C0301 src/horizons_web_service tests
+#
+#Black:
+#  stage: Static Analysis
+#  script:
+#    - python -m black . --check --verbose
+#
+#Unit:
+#  stage: Tests
+#  script:
+#    - pytest -v ./tests/unit
 #
 #Functional:
 #  stage: Tests
@@ -61,6 +61,8 @@ Unit:
 
 Build_Prep:
   stage: Build Prep
+  before_script:
+    - pip install poetry
   script:
     - HORIZONS_API_VERSION=$(poetry version -s)
     - echo "$(poetry version -s)" > VERSION
@@ -77,13 +79,14 @@ Build:
   dependencies:
     - Build_Prep
   script:
+    - HORIZONS_VERSION=$(cat VERSION)
     - mkdir -p /kaniko/.docker
     - echo "{\"auths\":{\"levan.home:5000\":{\"auth\":\"{}\"}}}" > /kaniko/.docker/config.json
     - >-
       /kaniko/executor
       --context "${CI_PROJECT_DIR}"
       --dockerfile "${CI_PROJECT_DIR}/src/docker/Dockerfile"
-      --destination "levan.home:5000/horizons-api:${cat VERSION}"
+      --destination "levan.home:5000/horizons-api:${HORIZONS_VERSION}"
       --build-arg PYPI_USER=$PYPI_USER
       --build-arg PYPI_PASSWORD=$PYPI_PASSWORD
 
