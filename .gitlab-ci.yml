@@ -13,6 +13,7 @@ image: python:3.9
 variables:
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
 
+
 # Pip's cache doesn't store the python packages
 # https://pip.pypa.io/en/stable/reference/pip_install/#caching
 #
@@ -25,18 +26,18 @@ cache:
 
 before_script:
   - python -V  # Print out python version for debugging
-  - pip install virtualenv
-  - virtualenv venv
-  - source venv/bin/activate
-  - pip install --upgrade pip
   - pip install poetry
+  - poetry config virtualenvs.create false
   - poetry config http-basic.home $PYPI_USER $PYPI_PASSWORD
   - poetry install -v
-  - export PYTHONPATH="$PYTHONPATH:$(pwd)/src"
+  - export PYTHONPATH="$(pwd)/src:$(pwd)/src/horizons_web_service:$PYTHONPATH"
 
 stages:
   - Static Analysis
-#  - Tests
+  - Tests
+  - Build Prep
+  - Build
+  - Deploy
 
 Pylint:
   stage: Static Analysis
@@ -48,12 +49,60 @@ Black:
   script:
     - python -m black . --check --verbose
 
-#Unit:
-#  stage: Tests
-#  script:
-#    - pytest -v ./tests/unit
+Unit:
+  stage: Tests
+  script:
+    - pytest -v ./tests/unit
 #
 #Functional:
 #  stage: Tests
 #  script:
 #    - pytest -v ./tests/functional
+
+Build_Prep:
+  stage: Build Prep
+  retry: 1
+  only:
+    - main
+  before_script:
+    - pip install poetry
+  script:
+    - HORIZONS_API_VERSION=$(poetry version -s)
+    - echo "$(poetry version -s)" > VERSION
+  artifacts:
+    paths:
+      - VERSION
+
+Build:
+  stage: Build
+  retry: 1
+  only:
+    - main
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
+  before_script: []
+  dependencies:
+    - Build_Prep
+  script:
+    - HORIZONS_VERSION=$(cat VERSION)
+    - mkdir -p /kaniko/.docker
+    - >-
+      /kaniko/executor
+      --insecure
+      --skip-tls-verify
+      --context "${CI_PROJECT_DIR}"
+      --dockerfile "${CI_PROJECT_DIR}/src/docker/Dockerfile"
+      --destination "levan.home:5000/horizons-api:${HORIZONS_VERSION}"
+      --build-arg PYPI_USER=$PYPI_USER
+      --build-arg PYPI_PASSWORD=$PYPI_PASSWORD
+
+Deploy:
+  stage: Deploy
+  retry: 1
+  only:
+    - main
+  image: alpine/helm:3.8.1
+  before_script: []
+  script:
+    - helm upgrade horizons-api ./horizons-api --install --values=./horizons-api/values.yaml --namespace horizons
