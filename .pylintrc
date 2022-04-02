@@ -8,4 +8,5 @@ disable=too-few-public-methods,
     useless-return,
     too-many-instance-attributes,
     logging-format-interpolation,
-    anomalous-backslash-in-string
+    anomalous-backslash-in-string,
+    missing-function-docstring
