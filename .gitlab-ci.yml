@@ -81,9 +81,10 @@ Build:
   script:
     - HORIZONS_VERSION=$(cat VERSION)
     - mkdir -p /kaniko/.docker
-#    - echo "{\"auths\":{\"levan.home:5000\":{\"auth\":\"{}\"}}}" > /kaniko/.docker/config.json
     - >-
       /kaniko/executor
+      --insecure
+      --skip-tls-verify
       --context "${CI_PROJECT_DIR}"
       --dockerfile "${CI_PROJECT_DIR}/src/docker/Dockerfile"
       --destination "levan.home:5000/horizons-api:${HORIZONS_VERSION}"
