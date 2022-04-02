@@ -1,0 +1,11 @@
+[REPORTS]
+output-format=colorized
+
+[DISABLED]
+disable=too-few-public-methods,
+    missing-module-docstring,
+    useless-object-inheritance,
+    useless-return,
+    too-many-instance-attributes,
+    logging-format-interpolation,
+    anomalous-backslash-in-string

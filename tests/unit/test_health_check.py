@@ -6,4 +6,3 @@ from httpx import AsyncClient
 async def test_health_endpoint(test_client: AsyncClient):
     res = await test_client.get("/health")
     assert res.status_code == 200
-
