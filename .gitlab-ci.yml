@@ -13,6 +13,7 @@ image: python:3.9
 variables:
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
 
+
 # Pip's cache doesn't store the python packages
 # https://pip.pypa.io/en/stable/reference/pip_install/#caching
 #
@@ -25,10 +26,6 @@ cache:
 
 before_script:
   - python -V  # Print out python version for debugging
-  - pip install virtualenv
-  - virtualenv venv
-  - source venv/bin/activate
-  - pip install --upgrade pip
   - pip install poetry
   - poetry config http-basic.home $PYPI_USER $PYPI_PASSWORD
   - poetry install -v
@@ -37,6 +34,7 @@ before_script:
 stages:
   - Static Analysis
   - Tests
+  - Build Prep
   - Build
   - Deploy
 
@@ -60,20 +58,31 @@ Unit:
 #  script:
 #    - pytest -v ./tests/functional
 
+Build_Prep:
+  stage: Build Prep
+  script:
+    - HORIZONS_API_VERSION=$(poetry version -s)
+    - echo "$(poetry version -s)" > VERSION
+  artifacts:
+    paths:
+      - VERSION
+
 Build:
   stage: Build
   image:
     name: gcr.io/kaniko-project/executor:debug
     entrypoint: [""]
+  before_script: []
+  dependencies:
+    - Build_Prep
   script:
     - mkdir -p /kaniko/.docker
-    - export HORIZONS_API_VERSION=$(poetry version -s)
     - echo "{\"auths\":{\"levan.home:5000\":{\"auth\":\"{}\"}}}" > /kaniko/.docker/config.json
     - >-
       /kaniko/executor
       --context "${CI_PROJECT_DIR}"
       --dockerfile "${CI_PROJECT_DIR}/src/docker/Dockerfile"
-      --destination "levan.home:5000/horizons-api:${HORIZONS_API_VERSION}"
+      --destination "levan.home:5000/horizons-api:${cat VERSION}"
       --build-arg PYPI_USER=$PYPI_USER
       --build-arg PYPI_PASSWORD=$PYPI_PASSWORD
 
