@@ -100,9 +100,12 @@ Build:
 Deploy:
   stage: Deploy
   retry: 1
+  dependencies:
+    - Build_Prep
   only:
     - main
   image: alpine/helm:3.8.1
   before_script: []
   script:
-    - helm upgrade horizons-api ./horizons-api --install --values=./horizons-api/values.yaml --namespace horizons
+    - HORIZONS_VERSION=$(cat VERSION)
+    - helm upgrade horizons-api ./horizons-api --install --values=./horizons-api/values.yaml --namespace horizons --set image.tag=$HORIZONS_VERSION
