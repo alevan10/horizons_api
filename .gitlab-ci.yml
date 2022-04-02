@@ -60,8 +60,8 @@ Unit:
 #  script:
 #    - pytest -v ./tests/functional
 
-build:
-  stage: build
+Build:
+  stage: Build
   image:
     name: gcr.io/kaniko-project/executor:debug
     entrypoint: [""]
