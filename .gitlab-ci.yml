@@ -88,5 +88,7 @@ Build:
 
 Deploy:
   stage: Deploy
+  image: alpine/helm:3.8.1
+  before_script: []
   script:
     - helm upgrade horizons-api ./horizons-api --install --values=./horizons-api/values.yaml --namespace horizons
