@@ -10,4 +10,5 @@ disable=too-few-public-methods,
     logging-format-interpolation,
     anomalous-backslash-in-string,
     missing-function-docstring,
-    unsubscriptable-object
+    unsubscriptable-object,
+    redefined-outer-name
