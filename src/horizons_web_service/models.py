@@ -7,7 +7,6 @@ from horizons_client.entities.enums import (
     Moons,
     Observers,
     Planets,
-    ResponseOptions,
     StepSize,
 )
 from horizons_client.services.request_objects import (
