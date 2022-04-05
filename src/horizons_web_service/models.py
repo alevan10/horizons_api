@@ -17,10 +17,21 @@ from horizons_client.services.request_objects import (
     StartTimeRequest,
     StopTimeRequest,
 )
+from humps.camel import case
 from pydantic import BaseModel, Field
 
 
-class EphemerideOptionsRequest(BaseModel):
+def to_camel(string):
+    return case(string)
+
+
+class BaseEphemerideModel(BaseModel):
+    class Config:
+        alias_generator = to_camel
+        allow_population_by_field_name = True
+
+
+class EphemerideOptionsRequest(BaseEphemerideModel):
     angle_format: AngleFormat = Field(default=AngleFormat.DEG)
     step_site: StepSize = Field(default=StepSize.HOUR)
     options: list[EphemerideOptions] = Field(
@@ -28,10 +39,10 @@ class EphemerideOptionsRequest(BaseModel):
     )
 
 
-class EphemerideRequest(BaseModel):
+class EphemerideRequest(BaseEphemerideModel):
     target: Union[Planets, Moons]
     observer: Observers = Field(default=Observers.SUN)
-    return_options: EphemerideOptionsRequest
+    return_options: EphemerideOptionsRequest = Field(default=EphemerideOptionsRequest())
     start_time: datetime = Field(default=datetime.utcnow())
     end_time: datetime = Field(default=datetime.utcnow() + timedelta(days=1))
 
@@ -43,13 +54,17 @@ class EphemerideRequest(BaseModel):
         return [command, center, start, stop]
 
 
-class EphemerideResponse(BaseModel):
+class EphemerideResponse(BaseEphemerideModel):
     date: datetime
-    ra_icrf: float
-    dec_icrf: float
-    dev_a_app: float
-    d_ra: float
-    ap_mag: float
-    s_brt: float
-    delta: float
-    deldot: float
+    ra_icrf: Optional[float]
+    dec_icrf: Optional[float]
+    dev_a_app: Optional[float]
+    d_ra: Optional[float]
+    ap_mag: Optional[float]
+    s_brt: Optional[float]
+    delta: Optional[float]
+    deldot: Optional[float]
+
+    class Config:
+        alias_generator = to_camel
+        allow_population_by_field_name = True
