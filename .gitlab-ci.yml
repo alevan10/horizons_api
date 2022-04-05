@@ -43,7 +43,7 @@ Pylint:
   stage: Static Analysis
   retry: 1
   script:
-    - pylint -d C0301 src/horizons_web_service tests
+    - pylint -E -d C0301 src/horizons_web_service tests
 
 Black:
   stage: Static Analysis
