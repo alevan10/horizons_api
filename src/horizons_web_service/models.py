@@ -55,8 +55,8 @@ class EphemerideRequest(BaseEphemerideModel):
 
 class EphemerideResponse(BaseEphemerideModel):
     date: datetime
-    ra_icrf: Optional[float]
-    dec_icrf: Optional[float]
+    ra_icrf: Optional[Union[float, str]]
+    dec_icrf: Optional[Union[float, str]]
     dev_a_app: Optional[float]
     d_ra: Optional[float]
     ap_mag: Optional[float]
