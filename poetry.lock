@@ -425,7 +425,7 @@ reference = "home"
 
 [[package]]
 name = "horizons-client"
-version = "0.1.5"
+version = "0.1.6"
 description = "An API Client for communicating with JPL's Horizons Ephemeride database."
 category = "main"
 optional = false
@@ -1700,8 +1700,8 @@ h11 = [
     {file = "h11-0.12.0.tar.gz", hash = "sha256:47222cb6067e4a307d535814917cd98fd0a57b6788ce715755fa2b6c28b56042"},
 ]
 horizons-client = [
-    {file = "horizons_client-0.1.5-py3-none-any.whl", hash = "md5:bf0de027b49d334819970080c141c54f"},
-    {file = "horizons_client-0.1.5.tar.gz", hash = "md5:1739b46421b829532ff031b38b57ed13"},
+    {file = "horizons_client-0.1.6-py3-none-any.whl", hash = "md5:96b1ef7953735d04df08e2eda58474b2"},
+    {file = "horizons_client-0.1.6.tar.gz", hash = "md5:ec9750fdc0eb597aef82a5cdf3bdd230"},
 ]
 httpcore = [
     {file = "httpcore-0.14.7-py3-none-any.whl", hash = "sha256:47d772f754359e56dd9d892d9593b6f9870a37aeb8ba51e9a88b09b3d68cfade"},
