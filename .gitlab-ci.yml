@@ -41,23 +41,27 @@ stages:
 
 Pylint:
   stage: Static Analysis
+  retry: 1
   script:
-    - pylint -d C0301 src/horizons_web_service tests
+    - pylint -E -d C0301 src/horizons_web_service tests
 
 Black:
   stage: Static Analysis
+  retry: 1
   script:
     - python -m black . --check --verbose
 
 Unit:
   stage: Tests
+  retry: 1
   script:
     - pytest -v ./tests/unit
-#
-#Functional:
-#  stage: Tests
-#  script:
-#    - pytest -v ./tests/functional
+
+Functional:
+  stage: Tests
+  retry: 1
+  script:
+    - pytest -v ./tests/functional
 
 Build_Prep:
   stage: Build Prep

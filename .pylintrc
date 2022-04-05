@@ -9,4 +9,6 @@ disable=too-few-public-methods,
     too-many-instance-attributes,
     logging-format-interpolation,
     anomalous-backslash-in-string,
-    missing-function-docstring
+    missing-function-docstring,
+    unsubscriptable-object,
+    redefined-outer-name
