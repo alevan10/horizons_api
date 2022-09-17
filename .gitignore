@@ -1,2 +1,6 @@
 /.idea
 /src/__pycache__
+/src/horizons_web_service/__pycache__
+
+# Local FastAPI run files
+*.pyc
