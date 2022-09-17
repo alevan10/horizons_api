@@ -26,7 +26,7 @@ cache:
 
 before_script:
   - python -V  # Print out python version for debugging
-  - pip install poetry < 1.2
+  - pip install poetry==1.1.15
   - poetry config virtualenvs.create false
   - poetry config http-basic.home $PYPI_USER $PYPI_PASSWORD
   - poetry install -v
