@@ -1,0 +1,32 @@
+[
+  {
+    "target": "199",
+    "observer": "@10",
+    "startTime": "2022-09-19T19:34:01.439Z",
+    "endTime": "2022-09-19T20:34:01.439Z",
+    "returnOptions": {
+      "angleFormat": "DEG",
+      "stepSize": "hour"
+    }
+  },
+  {
+    "target": "299",
+    "observer": "@10",
+    "startTime": "2022-09-19T19:34:01.439Z",
+    "endTime": "2022-09-19T20:34:01.439Z",
+    "returnOptions": {
+      "angleFormat": "DEG",
+      "stepSize": "hour"
+    }
+  },
+  {
+    "target": "399",
+    "observer": "@10",
+    "startTime": "2022-09-19T19:34:01.439Z",
+    "endTime": "2022-09-19T20:34:01.439Z",
+    "returnOptions": {
+      "angleFormat": "DEG",
+      "stepSize": "hour"
+    }
+  }
+]
