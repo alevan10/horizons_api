@@ -35,6 +35,6 @@ def test_end_time(test_start_time) -> datetime:
 @pytest.fixture
 def known_request() -> list[dict[str, Any]]:
     with open(
-        Path.cwd().parent.joinpath("horizons_request.json"), encoding="utf8"
+        Path(__file__).parent.joinpath("horizons_request.json"), encoding="utf8"
     ) as json_file:
         yield json.load(json_file)
