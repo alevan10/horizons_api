@@ -4,9 +4,6 @@ from blueprint import horizons_router
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-# import uvicorn
-
-
 default_origins = [
     "http://levan.home",
     "https://levan.home",
@@ -29,7 +26,3 @@ def create_app() -> FastAPI:
 
 
 app = create_app()
-
-# Uncomment for local development
-# if __name__ == "__main__":
-#     uvicorn.run(app, host="0.0.0.0", port=8081)

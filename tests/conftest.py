@@ -1,5 +1,7 @@
+import json
 from datetime import datetime, timedelta
-from typing import Generator
+from pathlib import Path
+from typing import Any, Generator
 
 import pytest
 from httpx import AsyncClient
@@ -28,3 +30,11 @@ def test_start_time() -> datetime:
 @pytest.fixture
 def test_end_time(test_start_time) -> datetime:
     yield test_start_time + timedelta(hours=1)
+
+
+@pytest.fixture
+def known_request() -> list[dict[str, Any]]:
+    with open(
+        Path.cwd().parent.joinpath("horizons_request.json"), encoding="utf8"
+    ) as json_file:
+        yield json.load(json_file)
