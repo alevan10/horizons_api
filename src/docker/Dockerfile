@@ -9,5 +9,5 @@ COPY pyproject.toml pyproject.toml
 RUN pip install --upgrade pip;\
     pip install poetry==1.1.15;\
     poetry config http-basic.home $PYPI_USER $PYPI_PASSWORD;\
-    poetry config virtualenvs.create false && poetry install -v --no-dev
+    poetry config virtualenvs.create false && poetry install -v
 CMD ["uvicorn", "api.horizons_web_service.app:app", "--host", "0.0.0.0", "--port", "80"]
