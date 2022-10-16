@@ -57,8 +57,6 @@ Black:
 Test-Build:
   stage: Test Build
   retry: 1
-  only:
-    - main
   image:
     name: gcr.io/kaniko-project/executor:debug
     entrypoint: [""]
@@ -79,8 +77,6 @@ Test-Build:
 Test-Deploy:
   stage: Test Deploy
   retry: 1
-  only:
-    - main
   image: alpine/helm:3.8.1
   before_script: []
   script:
