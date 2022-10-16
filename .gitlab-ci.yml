@@ -88,6 +88,7 @@ Test-Deploy:
       --set image.tag="$CI_COMMIT_SHORT_SHA"
       --set fullnameOverride=horizons-api-"$CI_COMMIT_SHORT_SHA"
       --set ingress.middleware.prefix="/api/$CI_COMMIT_SHORT_SHA"
+      --set ingress.hosts={"host":"levan.home","paths":[{"path":"api/$CI_COMMIT_SHORT_SHA","pathType":"ImplementationSpecific"}]}
 
 Unit:
   stage: Tests
@@ -109,12 +110,13 @@ E2E:
   retry: 1
   script:
     - export HORIZONS_API_URL="http://levan.home/api/$CI_COMMIT_SHORT_SHA"
+    - ./wait_for_endpoint.sh
     - pytest -v ./tests/e2e
+  allow_failure: true
 
 Docker_Cleanup:
   stage: Test Cleanup
   dependencies:
-    - Test-Build
     - Test-Deploy
   retry: 1
   before_script: [ ]
@@ -124,7 +126,6 @@ Docker_Cleanup:
 Helm_Cleanup:
   stage: Test Cleanup
   dependencies:
-    - Test-Build
     - Test-Deploy
   retry: 1
   image: alpine/helm:3.8.1
