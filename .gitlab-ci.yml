@@ -34,7 +34,10 @@ before_script:
 
 stages:
   - Static Analysis
+  - Test Build
+  - Test Deploy
   - Tests
+  - Test Cleanup
   - Build Prep
   - Build
   - Deploy
@@ -51,6 +54,50 @@ Black:
   script:
     - python -m black . --check --verbose
 
+Test-Build:
+  stage: Test Build
+  retry: 1
+  only:
+    - main
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
+  before_script: []
+  dependencies:
+    - Build_Prep
+  script:
+    - HORIZONS_VERSION=$CI_COMMIT_BRANCH
+    - mkdir -p /kaniko/.docker
+    - >-
+      /kaniko/executor
+      --insecure
+      --skip-tls-verify
+      --context "${CI_PROJECT_DIR}"
+      --dockerfile "${CI_PROJECT_DIR}/src/docker/Dockerfile"
+      --destination "levan.home:5000/horizons-api:${HORIZONS_VERSION}"
+      --build-arg PYPI_USER=$PYPI_USER
+      --build-arg PYPI_PASSWORD=$PYPI_PASSWORD
+
+Test-Deploy:
+  stage: Test Deploy
+  retry: 1
+  dependencies:
+    - Build_Prep
+  only:
+    - main
+  image: alpine/helm:3.8.1
+  before_script: []
+  script:
+    - HORIZONS_VERSION=$CI_COMMIT_BRANCH
+    - >-
+      helm upgrade --install horizons-api-"$CI_COMMIT_BRANCH"
+      ./horizons-api
+      --values=./horizons-api/values.yaml
+      --namespace horizons
+      --set image.tag=$CI_COMMIT_BRANCH
+      --set fullnameOverride=horizons-api-"$CI_COMMIT_BRANCH"
+      --set ingress.middleware.prefix="/api/$CI_COMMIT_BRANCH"
+
 Unit:
   stage: Tests
   retry: 1
@@ -62,6 +109,28 @@ Functional:
   retry: 1
   script:
     - pytest -v ./tests/functional
+
+E2E:
+  stage: Tests
+  retry: 1
+  script:
+    - export HORIZONS_API_URL="http://levan.home/api/$CI_COMMIT_BRANCH"
+    - pytest -v ./tests/e2e
+
+Docker_Cleanup:
+  stage: Test Cleanup
+  retry: 1
+  before_script: [ ]
+  script:
+    - ./delete_docker_image.sh
+
+Helm_Cleanup:
+  stage: Test Cleanup
+  retry: 1
+  image: alpine/helm:3.8.1
+  before_script: [ ]
+  script:
+    - helm uninstall horizons-api-"$CI_COMMIT_BRANCH"
 
 Build_Prep:
   stage: Build Prep
@@ -112,4 +181,4 @@ Deploy:
   before_script: []
   script:
     - HORIZONS_VERSION=$(cat VERSION)
-    - helm upgrade horizons-api ./horizons-api --install --values=./horizons-api/values.yaml --namespace horizons --set image.tag=$HORIZONS_VERSION
+    - helm upgrade --install horizons-api ./horizons-api --values=./horizons-api/values.yaml --namespace horizons --set image.tag=$HORIZONS_VERSION
