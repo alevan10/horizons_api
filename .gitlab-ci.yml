@@ -79,8 +79,6 @@ Test-Build:
 Test-Deploy:
   stage: Test Deploy
   retry: 1
-  dependencies:
-    - Build_Prep
   only:
     - main
   image: alpine/helm:3.8.1
@@ -110,6 +108,9 @@ Functional:
 
 E2E:
   stage: Tests
+  dependencies:
+    - Test-Build
+    - Test-Deploy
   retry: 1
   script:
     - export HORIZONS_API_URL="http://levan.home/api/$CI_COMMIT_BRANCH"
@@ -117,6 +118,9 @@ E2E:
 
 Docker_Cleanup:
   stage: Test Cleanup
+  dependencies:
+    - Test-Build
+    - Test-Deploy
   retry: 1
   before_script: [ ]
   script:
@@ -124,6 +128,9 @@ Docker_Cleanup:
 
 Helm_Cleanup:
   stage: Test Cleanup
+  dependencies:
+    - Test-Build
+    - Test-Deploy
   retry: 1
   image: alpine/helm:3.8.1
   before_script: [ ]
