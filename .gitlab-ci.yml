@@ -63,8 +63,6 @@ Test-Build:
     name: gcr.io/kaniko-project/executor:debug
     entrypoint: [""]
   before_script: []
-  dependencies:
-    - Build_Prep
   script:
     - HORIZONS_VERSION=$CI_COMMIT_BRANCH
     - mkdir -p /kaniko/.docker
