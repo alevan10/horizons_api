@@ -88,7 +88,7 @@ Test-Deploy:
       --set image.tag="$CI_COMMIT_SHORT_SHA"
       --set fullnameOverride=horizons-api-"$CI_COMMIT_SHORT_SHA"
       --set ingress.middleware.prefix="/api/$CI_COMMIT_SHORT_SHA"
-      --set ingress.hosts={"host":"levan.home","paths":[{"path":"api/$CI_COMMIT_SHORT_SHA","pathType":"ImplementationSpecific"}]}
+      --set ingress.hosts[0].paths[0].path="api/$CI_COMMIT_SHORT_SHA"
 
 Unit:
   stage: Tests
