@@ -32,7 +32,12 @@ async def ephemerides_endpoint(
         horizons_svc = HorizonsRequestService(request.to_horizons_request())
         logger.debug(
             "Request params",
-            [obj.generate_request_param() for obj in horizons_svc._request_objects],
+            extra={
+                "params": [
+                    obj.generate_request_param()
+                    for obj in horizons_svc._request_objects
+                ]
+            },
         )
         horizons_res = await horizons_svc.make_request()
         responses.update(
