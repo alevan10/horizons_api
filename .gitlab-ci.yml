@@ -62,7 +62,6 @@ Test-Build:
     entrypoint: [""]
   before_script: []
   script:
-    - HORIZONS_VERSION=$CI_COMMIT_BRANCH
     - mkdir -p /kaniko/.docker
     - >-
       /kaniko/executor
@@ -70,7 +69,7 @@ Test-Build:
       --skip-tls-verify
       --context "${CI_PROJECT_DIR}"
       --dockerfile "${CI_PROJECT_DIR}/src/docker/Dockerfile"
-      --destination "levan.home:5000/horizons-api:${HORIZONS_VERSION}"
+      --destination "levan.home:5000/horizons-api:${CI_COMMIT_SHORT_SHA}"
       --build-arg PYPI_USER=$PYPI_USER
       --build-arg PYPI_PASSWORD=$PYPI_PASSWORD
 
@@ -82,13 +81,13 @@ Test-Deploy:
   script:
     - HORIZONS_VERSION=$CI_COMMIT_BRANCH
     - >-
-      helm upgrade --install horizons-api-"$CI_COMMIT_BRANCH"
+      helm upgrade --install horizons-api-"$CI_COMMIT_SHORT_SHA"
       ./horizons-api
       --values=./horizons-api/values.yaml
       --namespace horizons
-      --set image.tag=$CI_COMMIT_BRANCH
-      --set fullnameOverride=horizons-api-"$CI_COMMIT_BRANCH"
-      --set ingress.middleware.prefix="/api/$CI_COMMIT_BRANCH"
+      --set image.tag="$CI_COMMIT_SHORT_SHA"
+      --set fullnameOverride=horizons-api-"$CI_COMMIT_SHORT_SHA"
+      --set ingress.middleware.prefix="/api/$CI_COMMIT_SHORT_SHA"
 
 Unit:
   stage: Tests
@@ -109,7 +108,7 @@ E2E:
     - Test-Deploy
   retry: 1
   script:
-    - export HORIZONS_API_URL="http://levan.home/api/$CI_COMMIT_BRANCH"
+    - export HORIZONS_API_URL="http://levan.home/api/$CI_COMMIT_SHORT_SHA"
     - pytest -v ./tests/e2e
 
 Docker_Cleanup:
@@ -131,7 +130,7 @@ Helm_Cleanup:
   image: alpine/helm:3.8.1
   before_script: [ ]
   script:
-    - helm uninstall horizons-api-"$CI_COMMIT_BRANCH"
+    - helm uninstall horizons-api-"$CI_COMMIT_SHORT_SHA"
 
 Build_Prep:
   stage: Build Prep
