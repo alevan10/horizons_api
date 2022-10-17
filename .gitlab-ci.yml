@@ -111,7 +111,7 @@ E2E:
   retry: 1
   script:
     - export HORIZONS_API_URL="http://levan.home/api/$CI_COMMIT_SHORT_SHA"
-    - ./wait_for_endpoint.sh
+    - cat wait_for_endpoint.sh | /bin/bash
     - pytest -v ./tests/e2e
   allow_failure: true
 
@@ -122,7 +122,7 @@ Docker_Cleanup:
   retry: 1
   before_script: [ ]
   script:
-    - ./delete_docker_image.sh
+    - cat delete_docker_image.sh | /bin/bash
 
 Helm_Cleanup:
   stage: Test Cleanup

@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 url=${HORIZONS_API_URL:="http://levan.home/api/v0"}
 count=0
 response=$(curl --silent $url/health)
