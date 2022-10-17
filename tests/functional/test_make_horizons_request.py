@@ -61,6 +61,7 @@ async def test_successful_post_with_options(
         for ephem in ephems:
             assert ephem.get("date")
             assert ephem.get("raIcrf")
+            assert isinstance(ephem.get("raIcrf"), float)
 
 
 @pytest.mark.asyncio
@@ -74,3 +75,4 @@ async def test_successful_post_with_known_request(test_client, known_request):
         for ephem in ephems:
             assert ephem.get("date")
             assert ephem.get("raIcrf")
+            assert isinstance(ephem.get("raIcrf"), float)

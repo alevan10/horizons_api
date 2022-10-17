@@ -4,7 +4,7 @@
 apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
 metadata:
-  name: horizons-middleware
+  name: {{ include "horizons-api.fullname" . }}-middleware
   namespace: horizons
   labels:
     {{- include "horizons-api.labels" . | nindent 4 }}
@@ -15,7 +15,7 @@ metadata:
 spec:
   stripPrefix:
     prefixes:
-      - "/api/v1"
+      - {{ .Values.ingress.middleware.prefix }}
 ---
 {{- if and .Values.ingress.className (not (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion)) }}
   {{- if not (hasKey .Values.ingress.annotations "kubernetes.io/ingress.class") }}

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "horizons-api"
-version = "0.1.8"
+version = "0.1.9"
 description = "A FastAPI Web Service to return results from a Horizons Ephemerides search."
 authors = ["alevan <levan.andrew.w@gmail.com>"]
 license = "MIT"

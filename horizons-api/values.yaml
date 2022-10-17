@@ -41,6 +41,8 @@ ingress:
       paths:
         - path: /api/v1
           pathType: ImplementationSpecific
+  middleware:
+    prefix: "/api/v1"
   tls: []
   #  - secretName: chart-example-tls
   #    hosts:
