@@ -4,7 +4,7 @@
 apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
 metadata:
-  name: {{ include "horizons-api.fullname" . }}-middleware
+  name: {{ $fullName }}-middleware
   namespace: horizons
   labels:
     {{- include "horizons-api.labels" . | nindent 4 }}

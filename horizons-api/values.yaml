@@ -35,7 +35,7 @@ ingress:
   enabled: true
   className: ""
   annotations:
-    traefik.ingress.kubernetes.io/router.middlewares: horizons-horizons-middleware@kubernetescrd
+    traefik.ingress.kubernetes.io/router.middlewares: horizons-horizons-api-middleware@kubernetescrd
   hosts:
     - host: levan.home
       paths:
