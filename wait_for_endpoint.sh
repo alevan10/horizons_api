@@ -1,5 +1,5 @@
 #!/bin/bash
-url=${HORIZONS_API_URL:="http://levan.home/api/v0"}
+url=${HORIZONS_API_URL:="http://levan.home/api/v1"}
 count=0
 response=$(curl --silent $url/health)
 while [ "$response" != "\"pong\"" ]
@@ -10,7 +10,7 @@ do
   fi
   response=$(curl --silent $url/health)
   ((count+=1))
-  echo "Attempt $count. Retrying..."
+  echo "Attempt $count. Retrying $url..."
   sleep 5
 done
 echo "Endpoint is ready"
