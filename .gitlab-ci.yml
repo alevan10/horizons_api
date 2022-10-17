@@ -89,7 +89,7 @@ Test-Deploy:
       --set fullnameOverride=horizons-api-"$CI_COMMIT_SHORT_SHA"
       --set ingress.middleware.prefix="/api/$CI_COMMIT_SHORT_SHA"
       --set ingress.hosts[0].paths[0].path="/api/$CI_COMMIT_SHORT_SHA"
-      --set ingress."annotations\.traefik\.ingress\.kubernetes\.io/router\.middlewares"="horizons-horizons-api-$CI_COMMIT_SHORT_SHA-middleware@kubernetescrd"
+      --set ingress.annotations."traefik\.ingress\.kubernetes\.io/router\.middlewares"="horizons-horizons-api-$CI_COMMIT_SHORT_SHA-middleware@kubernetescrd"
 
 Unit:
   stage: Tests
